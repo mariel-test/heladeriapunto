@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Frío &amp; Punto</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<div id="app">
+
+  <!-- ══════════════════════════════════════════
+       PANTALLA 1 — INICIO
+  ══════════════════════════════════════════ -->
+  <div id="screen-inicio" class="screen active">
+    <div class="logo">🍦 Frío &amp; Punto</div>
+    <div class="acciones">
+      <button class="btn-primario" onclick="irAProductos()">Hacer pedido</button>
+      <button class="btn-secundario" onclick="toggleChat()">💬 Consultar</button>
+    </div>
+    <div id="chat-area">
+      <div id="chat-mensajes"></div>
+      <div class="chat-input-row">
+        <input id="chat-input" type="text" placeholder="¿En qué te puedo ayudar?" autocomplete="off" />
+        <button onclick="enviarConsulta()">Enviar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       PANTALLA 2 — ELEGÍ PRODUCTO
+  ══════════════════════════════════════════ -->
+  <div id="screen-productos" class="screen">
+    <div class="screen-top">
+      <button class="btn-volver" onclick="showScreen('inicio')">← Inicio</button>
+      <h2>¿Qué tamaño?</h2>
+    </div>
+    <div id="productos-grid" class="grid-productos"></div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       PANTALLA 3 — ELEGÍ SABORES
+  ══════════════════════════════════════════ -->
+  <div id="screen-sabores" class="screen">
+    <div class="screen-top">
+      <button class="btn-volver" onclick="showScreen('productos')">← Volver</button>
+      <h2 id="titulo-sabores">Elegí sabores</h2>
+      <span id="contador-sabores" class="contador">0 / 0</span>
+    </div>
+    <label class="filtro-tacc">
+      <input type="checkbox" id="filtro-sin-tacc" onchange="filtrarSabores()" />
+      Filtrar sin TACC
+    </label>
+    <div id="sabores-grid" class="grid-sabores"></div>
+    <div class="acciones-footer">
+      <button id="btn-confirmar-sabores" class="btn-primario" disabled onclick="irAResumen()">
+        Confirmar
+      </button>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════
+       PANTALLA 4 — RESUMEN
+  ══════════════════════════════════════════ -->
+  <div id="screen-resumen" class="screen">
+    <div class="screen-top">
+      <button id="btn-volver-sabores" class="btn-volver" onclick="showScreen('sabores')">← Volver</button>
+      <h2>Tu pedido</h2>
+    </div>
+    <div id="resumen-detalle"></div>
+    <div class="acciones-footer">
+      <button id="btn-confirmar-pedido" class="btn-primario" onclick="confirmarPedido()">
+        Confirmar
+      </button>
+      <button id="btn-nuevo-pedido" class="btn-primario" onclick="nuevoPedido()" style="display:none">
+        Nuevo pedido
+      </button>
+    </div>
+  </div>
+
+</div><!-- #app -->
+
+<script>
+  const API = 'http://localhost:8000';
+
+  // ── Estado global ──────────────────────────────────
+  let productos        = [];
+  let todosLosSabores  = [];
+  let saboresMostrados = [];
+  let selectedProducto = null;
+  let selectedSabores  = [];   // [{id, nombre}]
+
+  // ── Navegación ─────────────────────────────────────
+  function showScreen(name) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + name).classList.add('active');
+  }
+
+  // ── PANTALLA 1 — INICIO ────────────────────────────
+  async function irAProductos() {
+    showScreen('productos');
+    const grid = document.getElementById('productos-grid');
+    grid.innerHTML = '<p class="msg-cargando">Cargando...</p>';
+
+    try {
+      const res = await fetch(`${API}/productos`);
+      if (!res.ok) throw new Error();
+      productos = await res.json();
+      renderProductos();
+    } catch {
+      grid.innerHTML = '<p class="msg-error">No se pudo cargar el menú. Intentá de nuevo.</p>';
+    }
+  }
+
+  function toggleChat() {
+    document.getElementById('chat-area').classList.toggle('visible');
+  }
+
+  // ── PANTALLA 2 — PRODUCTOS ─────────────────────────
+  function renderProductos() {
+    const grid = document.getElementById('productos-grid');
+    grid.innerHTML = productos.map(p => `
+      <button class="card-producto" onclick="seleccionarProducto(${p.id})">
+        <span class="nombre">${p.nombre}</span>
+        <span class="precio">$${Number(p.precio).toLocaleString('es-AR')}</span>
+      </button>
+    `).join('');
+  }
+
+  async function seleccionarProducto(id) {
+    selectedProducto  = productos.find(p => p.id === id);
+    selectedSabores   = [];
+
+    document.getElementById('titulo-sabores').textContent =
+      `${selectedProducto.nombre} — elegí hasta ${selectedProducto.sabores_max}`;
+    document.getElementById('filtro-sin-tacc').checked = false;
+
+    showScreen('sabores');
+
+    const grid = document.getElementById('sabores-grid');
+    grid.innerHTML = '<p class="msg-cargando">Cargando sabores...</p>';
+
+    try {
+      const res = await fetch(`${API}/sabores`);
+      if (!res.ok) throw new Error();
+      todosLosSabores  = await res.json();
+      saboresMostrados = [...todosLosSabores];
+      actualizarContador();
+      renderSabores();
+    } catch {
+      grid.innerHTML = '<p class="msg-error">No se pudieron cargar los sabores.</p>';
+    }
+  }
+
+  // ── PANTALLA 3 — SABORES ───────────────────────────
+  function renderSabores() {
+    const max  = selectedProducto.sabores_max;
+    const grid = document.getElementById('sabores-grid');
+
+    grid.innerHTML = saboresMostrados.map(s => {
+      const sel = selectedSabores.some(x => x.id === s.id);
+      const dis = !sel && selectedSabores.length >= max;
+      // Escapamos comillas en el nombre para el inline handler
+      const nombreEscapado = s.nombre.replace(/'/g, "\\'");
+      return `
+        <label class="card-sabor ${sel ? 'seleccionado' : ''} ${dis ? 'deshabilitado' : ''}">
+          <input type="checkbox"
+                 ${sel ? 'checked' : ''}
+                 ${dis ? 'disabled' : ''}
+                 onchange="toggleSabor(${s.id}, this.checked, '${nombreEscapado}')">
+          <span class="sabor-nombre">${s.nombre}</span>
+          ${s.sin_tacc ? '<span class="badge">Sin TACC</span>' : ''}
+        </label>
+      `;
+    }).join('');
+  }
+
+  function toggleSabor(id, checked, nombre) {
+    if (checked) {
+      selectedSabores.push({ id, nombre });
+    } else {
+      selectedSabores = selectedSabores.filter(s => s.id !== id);
+    }
+    actualizarContador();
+    renderSabores();
+  }
+
+  function filtrarSabores() {
+    const sinTacc    = document.getElementById('filtro-sin-tacc').checked;
+    saboresMostrados = sinTacc
+      ? todosLosSabores.filter(s => s.sin_tacc)
+      : [...todosLosSabores];
+
+    // Deseleccionar sabores que quedaron ocultos por el filtro
+    selectedSabores = selectedSabores.filter(
+      s => saboresMostrados.some(sv => sv.id === s.id)
+    );
+
+    actualizarContador();
+    renderSabores();
+  }
+
+  function actualizarContador() {
+    const max = selectedProducto?.sabores_max ?? 0;
+    document.getElementById('contador-sabores').textContent =
+      `${selectedSabores.length} / ${max}`;
+    document.getElementById('btn-confirmar-sabores').disabled =
+      selectedSabores.length === 0;
+  }
+
+  function irAResumen() {
+    if (selectedSabores.length === 0) return;
+
+    // Resetear estado del botón confirmar por si volvemos después de confirmar
+    const btnConfirmar = document.getElementById('btn-confirmar-pedido');
+    const btnNuevo     = document.getElementById('btn-nuevo-pedido');
+    btnConfirmar.style.display = '';
+    btnConfirmar.disabled      = false;
+    btnConfirmar.textContent   = 'Confirmar';
+    btnNuevo.style.display     = 'none';
+    document.getElementById('btn-volver-sabores').style.display = '';
+
+    renderResumen();
+    showScreen('resumen');
+  }
+
+  // ── PANTALLA 4 — RESUMEN ───────────────────────────
+  function renderResumen() {
+    document.getElementById('resumen-detalle').innerHTML = `
+      <div class="resumen-box">
+        <div class="resumen-producto-nombre">${selectedProducto.nombre}</div>
+        <div class="resumen-precio">$${Number(selectedProducto.precio).toLocaleString('es-AR')}</div>
+        <ul class="resumen-sabores">
+          ${selectedSabores.map(s => `<li>${s.nombre}</li>`).join('')}
+        </ul>
+      </div>
+    `;
+  }
+
+  async function confirmarPedido() {
+    const btn = document.getElementById('btn-confirmar-pedido');
+    btn.disabled     = true;
+    btn.textContent  = 'Confirmando...';
+
+    try {
+      const res = await fetch(`${API}/pedido`, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({
+          producto_id:      selectedProducto.id,
+          sabores_elegidos: selectedSabores,
+        }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        alert('Error: ' + (err.detail ?? 'No se pudo crear el pedido'));
+        btn.disabled    = false;
+        btn.textContent = 'Confirmar';
+        return;
+      }
+
+      const pedido = await res.json();
+
+      document.getElementById('resumen-detalle').innerHTML = `
+        <div class="resumen-box">
+          <div class="confirmado">✓ Pedido confirmado</div>
+          <div class="pedido-id">Pedido #${pedido.id}</div>
+          <div class="resumen-producto-nombre">${selectedProducto.nombre}</div>
+          <div class="resumen-precio">$${Number(pedido.total).toLocaleString('es-AR')}</div>
+          <ul class="resumen-sabores">
+            ${pedido.sabores_elegidos.map(s => `<li>${s.nombre}</li>`).join('')}
+          </ul>
+        </div>
+      `;
+
+      btn.style.display = 'none';
+      document.getElementById('btn-nuevo-pedido').style.display  = '';
+      document.getElementById('btn-volver-sabores').style.display = 'none';
+
+    } catch {
+      alert('Error de conexión. Intentá de nuevo.');
+      btn.disabled    = false;
+      btn.textContent = 'Confirmar';
+    }
+  }
+
+  function nuevoPedido() {
+    selectedProducto  = null;
+    selectedSabores   = [];
+    todosLosSabores   = [];
+    saboresMostrados  = [];
+    showScreen('inicio');
+  }
+
+  // ── CHAT IA ────────────────────────────────────────
+  async function enviarConsulta() {
+    const input = document.getElementById('chat-input');
+    const query = input.value.trim();
+    if (!query) return;
+
+    input.value = '';
+    agregarMensaje('usuario', query);
+
+    try {
+      const res = await fetch(`${API}/ia/ask`, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ query }),
+      });
+
+      if (!res.ok) {
+        agregarMensaje('ia', 'Asistente no disponible. Consultá en caja.');
+        return;
+      }
+
+      const data = await res.json();
+      agregarMensaje('ia', data.answer);
+    } catch {
+      agregarMensaje('ia', 'Asistente no disponible. Consultá en caja.');
+    }
+  }
+
+  function agregarMensaje(tipo, texto) {
+    const contenedor = document.getElementById('chat-mensajes');
+    const div        = document.createElement('div');
+    div.className    = 'mensaje ' + tipo;
+    div.textContent  = texto;
+    contenedor.appendChild(div);
+    contenedor.scrollTop = contenedor.scrollHeight;
+  }
+
+  document.getElementById('chat-input').addEventListener('keydown', e => {
+    if (e.key === 'Enter') enviarConsulta();
+  });
+</script>
+
+</body>
+</html>

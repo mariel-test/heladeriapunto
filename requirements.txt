@@ -1,0 +1,24 @@
+# App
+fastapi==0.115.6
+uvicorn[standard]==0.34.0
+psycopg2-binary==2.9.12
+python-dotenv==1.2.2
+
+# Tests API
+pytest==8.3.4
+requests==2.32.3
+
+# Tests UI
+pytest-playwright==0.6.2
+
+# Tests IA
+ragas==0.2.8
+deepeval==1.4.10
+
+# Reportes
+allure-pytest==2.13.5
+
+# IA (paso 7 — ChromaDB + Ollama + LangChain)
+chromadb==0.5.20
+langchain==0.3.19
+langchain-community==0.3.19
