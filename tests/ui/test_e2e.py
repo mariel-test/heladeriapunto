@@ -16,6 +16,7 @@ Correr:
 """
 
 import json
+import requests
 from playwright.sync_api import Page, Route, expect
 
 FRONTEND         = "http://localhost:3000"
@@ -99,6 +100,15 @@ def test_e2e01_flujo_completo_pedido(page: Page):
     pedido_texto = page.locator(".pedido-id").inner_text()
     numero = pedido_texto.replace("Pedido #", "").strip()
     assert numero.isdigit(), f"El id del pedido debe ser numérico: '{numero}'"
+
+    # BUG-004 fix: verificar que el pedido exista en la BD (no solo en la UI)
+    resp = requests.get(f"{API}/pedido/{numero}")
+    assert resp.status_code == 200, (
+        f"Pedido #{numero} mostrado en UI pero no encontrado en BD (status {resp.status_code})"
+    )
+    db_data = resp.json()
+    assert db_data["id"] == int(numero)
+    assert db_data["estado"] == "pendiente"
 
     # El botón "Confirmar" se oculta; aparece "Nuevo pedido"
     expect(page.locator("#btn-confirmar-pedido")).not_to_be_visible()

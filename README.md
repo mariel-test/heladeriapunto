@@ -59,7 +59,7 @@ allure serve tests/reports/allure-results
 
 ## Reporte de APIs — scope de automatización
 
-**Total de endpoints:** 8 rutas · **Total de casos de prueba:** 25 · **Archivos de test:** 3
+**Total de endpoints:** 8 rutas · **Total de casos de prueba:** 26 · **Archivos de test:** 3
 
 ### `GET /sabores` — 8 casos
 
@@ -104,12 +104,13 @@ allure serve tests/reports/allure-results
 | 22 | ❌ Negativo | Body sin `producto_id` | 422 |
 | 23 | ❌ Negativo | Body no es JSON válido | 422 |
 
-### `GET /pedido/{id}` — 2 casos
+### `GET /pedido/{id}` — 3 casos
 
 | # | Tipo | Escenario | Qué verifica |
 |---|------|-----------|--------------|
 | 24 | ✅ Happy | ID de pedido creado en test anterior | 200 · `sabores_elegidos` es lista con `id` y `nombre` |
 | 25 | ❌ Negativo | ID inexistente (`9999`) | 404 |
+| 26 | 🔍 Negocio | Persistencia en BD (BUG-004) | POST crea pedido · GET devuelve `producto_id`, `total`, `estado="pendiente"` y `sabores_elegidos` exactos |
 
 ### `POST /ia/ask` — fuera de scope (paso 8)
 
@@ -121,8 +122,8 @@ El endpoint devuelve 503 (stub) hasta que el módulo IA esté construido. Los te
 |---------|-------|
 | `tests/api/test_sabores.py` | 8 |
 | `tests/api/test_productos.py` | 5 |
-| `tests/api/test_pedidos.py` | 12 |
-| **Total** | **25** |
+| `tests/api/test_pedidos.py` | 13 |
+| **Total** | **26** |
 
 ---
 
@@ -133,6 +134,7 @@ El endpoint devuelve 503 (stub) hasta que el módulo IA esté construido. Los te
 | BUG-001 | `frontend/index.html` | Badge de alérgeno mostraba "Sin TACC" — el texto se traducía incorrectamente en navegadores con detección de idioma automática y se solapaba visualmente con el nombre del sabor en tarjetas con nombre largo. **Fix:** etiqueta reducida a "TACC". Detectado en TC-INT02 y TC-INT05. | Minor | ✅ Cerrado en `dev` |
 | BUG-002 | `frontend/index.html` | Checkbox de filtro mostraba la etiqueta "Filtrar sin TACC", redacción semánticamente incorrecta: el filtro muestra los sabores **aptos para** celíacos (con certificación TACC), no los que "no tienen TACC". **Fix:** texto corregido a "Filtrar con TACC". Detectado en TC-INT03. | Minor | ✅ Cerrado en `dev` |
 | BUG-003 | `frontend/style.css` | En la pantalla "¿Qué tamaño?" al hacer hover sobre las tarjetas superiores el header las cubría. Causa: `.grid-productos` tiene `overflow-y: auto` que genera un scroll container y recorta el `transform: translateY(-3px)` del hover en las tarjetas de la fila superior. **Pendiente de corrección por desarrollador frontend.** Este defecto fue identificado por el equipo de QA (automatización); la corrección requiere intervención de un desarrollador frontend ya que implica modificar estilos CSS de layout. **TC-INT03: NO PASS** por este defecto. | Minor | 🔴 Abierto |
+| BUG-004 | `tests/ui/test_e2e.py` (TC-E2E01) | TC-E2E01 (flujo completo) pasaba aunque el pedido no existiera en la base de datos: el test solo verificaba que la UI mostrara un ID numérico en `.pedido-id`, sin llamar a `GET /pedido/{id}` para confirmar la persistencia real. Un pedido generado en cliente o una respuesta en caché podría superar el test sin crear ningún registro en BD. **Fix:** se agregó verificación directa contra la API (`GET /pedido/{id}`) y se incorporó el caso TC-26 en la suite API. Detectado al revisar cobertura de TC-E2E01. | Major | ✅ Cerrado en `dev` |
 
 ---
 

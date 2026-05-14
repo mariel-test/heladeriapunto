@@ -63,6 +63,33 @@ def test_obtener_pedido_existente(http, base_url, pedido_creado):
     assert all("id" in s and "nombre" in s for s in data["sabores_elegidos"])
 
 
+def test_pedido_persiste_con_datos_correctos_en_bd(http, base_url, producto_max4, sabores):
+    """TC-26 — BUG-004: después de crear un pedido, GET /pedido/{id} debe devolver
+    los mismos datos: producto_id, total, estado='pendiente' y sabores_elegidos exactos."""
+    elegidos = [{"id": s["id"], "nombre": s["nombre"]} for s in sabores[:2]]
+    payload = {"producto_id": producto_max4["id"], "sabores_elegidos": elegidos}
+
+    post_res = http.post(f"{base_url}/pedido", json=payload)
+    assert post_res.status_code == 201
+    pedido_id = post_res.json()["id"]
+
+    get_res = http.get(f"{base_url}/pedido/{pedido_id}")
+    assert get_res.status_code == 200, (
+        f"Pedido #{pedido_id} no encontrado en BD tras crearlo (status {get_res.status_code})"
+    )
+    data = get_res.json()
+
+    assert data["id"] == pedido_id
+    assert data["producto_id"] == producto_max4["id"]
+    assert data["total"] == producto_max4["precio"]
+    assert data["estado"] == "pendiente"
+    ids_guardados = {s["id"] for s in data["sabores_elegidos"]}
+    ids_enviados  = {s["id"] for s in elegidos}
+    assert ids_guardados == ids_enviados, (
+        f"Sabores guardados {ids_guardados} != enviados {ids_enviados}"
+    )
+
+
 def test_obtener_pedido_inexistente_retorna_404(http, base_url):
     res = http.get(f"{base_url}/pedido/9999")
 

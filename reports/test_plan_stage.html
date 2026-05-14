@@ -250,7 +250,7 @@
 ════════════════════════════════════════════════ -->
 <div class="summary">
   <div class="card pass">
-    <div class="num">25</div>
+    <div class="num">26</div>
     <div class="label">✅ Pasaron (API)</div>
   </div>
   <div class="card pending">
@@ -284,7 +284,7 @@
     <span>Progreso del plan de pruebas</span>
     <span>35 / 56 test cases construidos</span>
   </div>
-  <div class="progress-bar"><div class="progress-fill" style="width:73%"></div></div>
+  <div class="progress-bar"><div class="progress-fill" style="width:74%"></div></div>
 </div>
 
 <div class="legend">
@@ -467,7 +467,7 @@
 <div class="section">
   <div class="section-header bg-api">
     📋 API — Pedidos
-    <span class="badge">12 tests · PASS</span>
+    <span class="badge">13 tests · PASS</span>
     <span style="margin-left:auto;font-size:11px;font-weight:400;opacity:.85;">tests/api/test_pedidos.py</span>
   </div>
   <div class="tbl-wrap">
@@ -584,6 +584,15 @@
           <td class="desc">POST /pedido con Content-Type application/json pero body no es JSON válido</td>
           <td class="expected">HTTP 422 Unprocessable Entity</td>
           <td><span class="pri medium">Medium</span></td>
+          <td><span class="sev major">Major</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-PD13</td>
+          <td class="name">Persistencia real en BD (BUG-004)</td>
+          <td class="desc">POST /pedido crea el registro · GET /pedido/{id} lo recupera con producto_id, total, estado y sabores_elegidos exactos</td>
+          <td class="expected">HTTP 200 · todos los campos coinciden con lo enviado en el POST · estado == "pendiente"</td>
+          <td><span class="pri critical">Critical</span></td>
           <td><span class="sev major">Major</span></td>
           <td><span class="status pass">✓ PASS</span></td>
         </tr>
@@ -1114,6 +1123,35 @@
             </div>
           </td>
         </tr>
+        <tr>
+          <td class="id">BUG-004</td>
+          <td class="name">tests/ui/test_e2e.py<br><span style="font-size:11px;color:#64748b;font-weight:400;">TC-E2E01 · test_e2e01_flujo_completo_pedido</span></td>
+          <td class="desc">
+            TC-E2E01 pasaba aunque el pedido <strong>no existiera en la base de datos</strong>:
+            el test solo verificaba que la UI mostrara un ID numérico en
+            <code>.pedido-id</code>, sin llamar a
+            <code>GET /pedido/{id}</code> para confirmar persistencia real.
+            Un ID generado en cliente o una respuesta en caché podría superar el test
+            sin crear ningún registro en BD.
+            <br><br>
+            <strong>Fix:</strong> se agregó verificación directa contra la API
+            (<code>GET /pedido/{id}</code>) con assert sobre <code>id</code>,
+            <code>estado</code>. Se incorporó además TC-PD13 (TC-26) en la suite API
+            para cubrir persistencia de todos los campos.
+          </td>
+          <td style="white-space:nowrap;font-size:12px;">
+            TC-E2E01<br>TC-PD13
+          </td>
+          <td><span class="sev major">Major</span></td>
+          <td>
+            <span class="status pass" style="background:#dcfce7;color:#16a34a;">
+              ✓ Cerrado
+            </span>
+            <div style="font-size:10.5px;color:#64748b;margin-top:4px;">
+              Fix en <code>dev</code> · 2026-05-14
+            </div>
+          </td>
+        </tr>
       </tbody>
     </table>
   </div>
@@ -1126,7 +1164,7 @@
 <footer>
   Frío &amp; Punto — Test Plan v1.0 &nbsp;·&nbsp; Branch: <strong>dev</strong> &nbsp;·&nbsp;
   Generado el 2026-05-14 &nbsp;·&nbsp; QA Owner: mariel-test &nbsp;·&nbsp;
-  41 / 56 test cases implementados (73%)
+  42 / 57 test cases implementados (74%)
 </footer>
 
 </body>
