@@ -1007,7 +1007,7 @@
 <div class="section">
   <div class="section-header" style="background:#b45309;">
     🐛 Defectos Encontrados
-    <span class="badge">1 defecto · Cerrado</span>
+    <span class="badge">2 defectos · Cerrados</span>
     <span style="margin-left:auto;font-size:11px;font-weight:400;opacity:.85;">Detectados durante la ejecución de los tests de integración UI↔API</span>
   </div>
   <div class="tbl-wrap">
@@ -1038,6 +1038,31 @@
           </td>
           <td style="white-space:nowrap;font-size:12px;">
             TC-INT02<br>TC-INT05
+          </td>
+          <td><span class="sev minor">Minor</span></td>
+          <td>
+            <span class="status pass" style="background:#dcfce7;color:#16a34a;">
+              ✓ Cerrado
+            </span>
+            <div style="font-size:10.5px;color:#64748b;margin-top:4px;">
+              Fix en <code>dev</code> · 2026-05-14
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="id">BUG-002</td>
+          <td class="name">frontend/index.html<br><span style="font-size:11px;color:#64748b;font-weight:400;">label .filtro-tacc</span></td>
+          <td class="desc">
+            El checkbox de filtro mostraba la etiqueta <strong>"Filtrar sin TACC"</strong>,
+            redacción semánticamente incorrecta: el filtro muestra los sabores
+            <em>aptos para celíacos</em> (con certificación sin TACC), no los que
+            "no tienen TACC". La etiqueta generaba confusión al usuario sobre
+            qué resultado esperar al activar el filtro.
+            <br><br>
+            <strong>Fix aplicado:</strong> texto corregido a <code>"Filtrar con TACC"</code>.
+          </td>
+          <td style="white-space:nowrap;font-size:12px;">
+            TC-INT03
           </td>
           <td><span class="sev minor">Minor</span></td>
           <td>

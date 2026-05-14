@@ -99,7 +99,7 @@ def test_int02_sabores_se_cargan_desde_api_al_seleccionar_producto(page: Page):
 # ── TC-INT03 ──────────────────────────────────────────────────────────────────
 
 def test_int03_filtro_sin_tacc_filtra_en_cliente_sin_nueva_request(page: Page):
-    """TC-INT03: El checkbox 'Filtrar sin TACC' filtra la lista en memoria
+    """TC-INT03: El checkbox 'Filtrar con TACC' filtra la lista en memoria
     (todosLosSabores) sin disparar una nueva request a la API."""
     ir_a_sabores(page)
 

@@ -131,6 +131,7 @@ El endpoint devuelve 503 (stub) hasta que el módulo IA esté construido. Los te
 | ID | Componente | Descripción | Severidad | Estado |
 |----|-----------|-------------|-----------|--------|
 | BUG-001 | `frontend/index.html` | Badge de alérgeno mostraba "Sin TACC" — el texto se traducía incorrectamente en navegadores con detección de idioma automática y se solapaba visualmente con el nombre del sabor en tarjetas con nombre largo. **Fix:** etiqueta reducida a "TACC". Detectado en TC-INT02 y TC-INT05. | Minor | ✅ Cerrado en `dev` |
+| BUG-002 | `frontend/index.html` | Checkbox de filtro mostraba la etiqueta "Filtrar sin TACC", redacción semánticamente incorrecta: el filtro muestra los sabores **aptos para** celíacos (con certificación TACC), no los que "no tienen TACC". **Fix:** texto corregido a "Filtrar con TACC". Detectado en TC-INT03. | Minor | ✅ Cerrado en `dev` |
 
 ---
 
