@@ -328,15 +328,16 @@ html, body {
 }
 
 .badge {
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   font-weight: 700;
   text-transform: uppercase;
   background: var(--badge-bg);
   color: #6ee7b7;
-  padding: 3px 7px;
+  padding: 2px 5px;
   border-radius: 4px;
   white-space: nowrap;
   flex-shrink: 0;
+  line-height: 1.4;
 }
 
 /* ══════════════════════════════════════════════════

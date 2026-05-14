@@ -50,7 +50,7 @@
     </div>
     <label class="filtro-tacc">
       <input type="checkbox" id="filtro-sin-tacc" onchange="filtrarSabores()" />
-      Filtrar con TACC
+      Filtrar sin TACC
     </label>
     <div id="sabores-grid" class="grid-sabores"></div>
     <div class="acciones-footer">
@@ -170,7 +170,7 @@
                  ${dis ? 'disabled' : ''}
                  onchange="toggleSabor(${s.id}, this.checked, '${nombreEscapado}')">
           <span class="sabor-nombre">${s.nombre}</span>
-          ${s.sin_tacc ? '<span class="badge">TACC</span>' : ''}
+          ${s.sin_tacc ? '<span class="badge">Sin TACC</span>' : ''}
         </label>
       `;
     }).join('');

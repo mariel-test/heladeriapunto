@@ -170,7 +170,7 @@ def test_e2e04_validacion_sabores_maximo_bloquea_en_ui(page: Page):
 # ── TC-E2E05 ──────────────────────────────────────────────────────────────────
 
 def test_e2e05_filtro_tacc_en_flujo_de_sabores(page: Page):
-    """TC-E2E05: Durante la selección de sabores, 'Filtrar con TACC' muestra solo
+    """TC-E2E05: Durante la selección de sabores, 'Filtrar sin TACC' muestra solo
     los 8 sabores aptos (sin_tacc=true) y oculta Brownie y Tramontana."""
     page.goto(FRONTEND)
     page.locator("text=Hacer pedido").click()
@@ -178,8 +178,8 @@ def test_e2e05_filtro_tacc_en_flujo_de_sabores(page: Page):
     page.locator(".card-producto", has_text=PRODUCTO_MAX4).click()
     page.locator(".card-sabor").first.wait_for()
 
-    # Verificar que el label del filtro dice "Filtrar con TACC" (fix BUG-002)
-    expect(page.locator(".filtro-tacc")).to_contain_text("Filtrar con TACC")
+    # Verificar que el label del filtro dice "Filtrar sin TACC"
+    expect(page.locator(".filtro-tacc")).to_contain_text("Filtrar sin TACC")
 
     # Sin filtro: 10 sabores
     expect(page.locator(".card-sabor")).to_have_count(TOTAL_SABORES)
