@@ -1007,7 +1007,7 @@
 <div class="section">
   <div class="section-header" style="background:#b45309;">
     🐛 Defectos Encontrados
-    <span class="badge">2 defectos · Cerrados</span>
+    <span class="badge">3 defectos · Cerrados</span>
     <span style="margin-left:auto;font-size:11px;font-weight:400;opacity:.85;">Detectados durante la ejecución de los tests de integración UI↔API</span>
   </div>
   <div class="tbl-wrap">
@@ -1049,6 +1049,38 @@
             </div>
           </td>
         </tr>
+        <tr>
+          <td class="id">BUG-003</td>
+          <td class="name">frontend/style.css<br><span style="font-size:11px;color:#64748b;font-weight:400;">.grid-productos</span></td>
+          <td class="desc">
+            En la pantalla <strong>"¿Qué tamaño?"</strong>, al hacer hover sobre
+            las tarjetas de la fila superior, el header las cubría visualmente.
+            <br><br>
+            <strong>Causa raíz:</strong> <code>.grid-productos</code> tenía
+            <code>overflow-y: auto</code>, que convierte el grid en un
+            <em>scroll container</em>. Ese contenedor recorta cualquier contenido
+            que supere su borde superior, incluyendo el
+            <code>transform: translateY(-3px)</code> del efecto hover — los 3px
+            que la tarjeta sube quedan ocultos exactamente donde está el header.
+            <br><br>
+            <strong>Fix aplicado:</strong> eliminado <code>overflow-y: auto</code>
+            (5 productos siempre caben en pantalla sin scroll) y añadido
+            <code>padding-top: 4px</code> como buffer visual.
+          </td>
+          <td style="white-space:nowrap;font-size:12px;">
+            Reporte manual<br>pantalla productos
+          </td>
+          <td><span class="sev minor">Minor</span></td>
+          <td>
+            <span class="status pass" style="background:#dcfce7;color:#16a34a;">
+              ✓ Cerrado
+            </span>
+            <div style="font-size:10.5px;color:#64748b;margin-top:4px;">
+              Fix en <code>dev</code> · 2026-05-14
+            </div>
+          </td>
+        </tr>
+
         <tr>
           <td class="id">BUG-002</td>
           <td class="name">frontend/index.html<br><span style="font-size:11px;color:#64748b;font-weight:400;">label .filtro-tacc</span></td>
