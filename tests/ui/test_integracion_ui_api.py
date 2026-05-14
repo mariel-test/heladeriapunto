@@ -91,8 +91,9 @@ def test_int02_sabores_se_cargan_desde_api_al_seleccionar_producto(page: Page):
     expect(page.locator("#titulo-sabores")).to_contain_text(PRODUCTO_MAX1_NOMBRE)
     expect(page.locator("#titulo-sabores")).to_contain_text("1")
 
-    # Hay tarjetas con badge "Sin TACC" (8 del seed) y tarjetas sin él (2)
+    # Hay tarjetas con badge "TACC" (8 del seed) y tarjetas sin él (2)
     expect(page.locator(".card-sabor .badge").first).to_be_visible()
+    expect(page.locator(".card-sabor .badge").first).to_have_text("TACC")
 
 
 # ── TC-INT03 ──────────────────────────────────────────────────────────────────

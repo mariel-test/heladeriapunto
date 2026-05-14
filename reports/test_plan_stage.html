@@ -1002,6 +1002,60 @@
 
 
 <!-- ════════════════════════════════════════════════
+     SECCIÓN 8 — DEFECTOS ENCONTRADOS
+════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header" style="background:#b45309;">
+    🐛 Defectos Encontrados
+    <span class="badge">1 defecto · Cerrado</span>
+    <span style="margin-left:auto;font-size:11px;font-weight:400;opacity:.85;">Detectados durante la ejecución de los tests de integración UI↔API</span>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Componente</th>
+          <th>Descripción</th>
+          <th>Detectado en</th>
+          <th>Severidad</th>
+          <th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="id">BUG-001</td>
+          <td class="name">frontend/index.html<br><span style="font-size:11px;color:#64748b;font-weight:400;">.badge en .card-sabor</span></td>
+          <td class="desc">
+            El badge de alérgeno mostraba el texto <strong>"Sin TACC"</strong>.
+            En navegadores con detección de idioma automática el término se traducía
+            incorrectamente (<em>"Eso es TACC."</em>), y en tarjetas con nombres
+            largos el badge se solapaba visualmente con el texto del sabor por falta
+            de espacio en el layout flex.
+            <br><br>
+            <strong>Fix aplicado:</strong> etiqueta reducida a <code>"TACC"</code>
+            — más corta, no ambigua para traducción automática y no se solapa.
+          </td>
+          <td style="white-space:nowrap;font-size:12px;">
+            TC-INT02<br>TC-INT05
+          </td>
+          <td><span class="sev minor">Minor</span></td>
+          <td>
+            <span class="status pass" style="background:#dcfce7;color:#16a34a;">
+              ✓ Cerrado
+            </span>
+            <div style="font-size:10.5px;color:#64748b;margin-top:4px;">
+              Fix en <code>dev</code> · 2026-05-14
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════
      FOOTER
 ════════════════════════════════════════════════ -->
 <footer>

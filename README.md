@@ -126,6 +126,14 @@ El endpoint devuelve 503 (stub) hasta que el módulo IA esté construido. Los te
 
 ---
 
+## Defectos conocidos
+
+| ID | Componente | Descripción | Severidad | Estado |
+|----|-----------|-------------|-----------|--------|
+| BUG-001 | `frontend/index.html` | Badge de alérgeno mostraba "Sin TACC" — el texto se traducía incorrectamente en navegadores con detección de idioma automática y se solapaba visualmente con el nombre del sabor en tarjetas con nombre largo. **Fix:** etiqueta reducida a "TACC". Detectado en TC-INT02 y TC-INT05. | Minor | ✅ Cerrado en `dev` |
+
+---
+
 ## Estructura del proyecto
 
 ```
