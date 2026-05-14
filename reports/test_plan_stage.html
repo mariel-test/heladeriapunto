@@ -1125,19 +1125,28 @@
         </tr>
         <tr>
           <td class="id">BUG-004</td>
-          <td class="name">tests/ui/test_e2e.py<br><span style="font-size:11px;color:#64748b;font-weight:400;">TC-E2E01 · test_e2e01_flujo_completo_pedido</span></td>
+          <td class="name">backend/ · DATABASE_URL<br><span style="font-size:11px;color:#64748b;font-weight:400;">Configuración de conexión a PostgreSQL</span></td>
           <td class="desc">
-            TC-E2E01 pasaba aunque el pedido <strong>no existiera en la base de datos</strong>:
-            el test solo verificaba que la UI mostrara un ID numérico en
-            <code>.pedido-id</code>, sin llamar a
-            <code>GET /pedido/{id}</code> para confirmar persistencia real.
-            Un ID generado en cliente o una respuesta en caché podría superar el test
-            sin crear ningún registro en BD.
+            Los pedidos <strong>no se persistían en la base de datos</strong>.
             <br><br>
-            <strong>Fix:</strong> se agregó verificación directa contra la API
-            (<code>GET /pedido/{id}</code>) con assert sobre <code>id</code>,
-            <code>estado</code>. Se incorporó además TC-PD13 (TC-26) en la suite API
-            para cubrir persistencia de todos los campos.
+            <strong>Causa raíz — dos problemas encadenados:</strong>
+            <ol style="margin:6px 0 6px 18px;display:flex;flex-direction:column;gap:4px;">
+              <li>El nombre de la base de datos en <code>DATABASE_URL</code> no coincidía
+              con el nombre real con el que fue creada la BD.</li>
+              <li>La contraseña del usuario <code>admin</code> había sido reseteada al
+              recrear el contenedor de PostgreSQL, dejando la conexión del backend
+              inválida.</li>
+            </ol>
+            Ambos problemas hacían que el backend fallara silenciosamente al intentar
+            persistir el pedido.
+            <br><br>
+            <strong>Síntoma:</strong> la UI mostraba "✓ Pedido confirmado" pero el
+            registro no existía en BD y <code>GET /pedido/{id}</code> devolvía 404.
+            <br><br>
+            <strong>Fix:</strong> corregido <code>DATABASE_URL</code> en <code>.env</code>
+            (nombre de BD y contraseña correctos). TC-E2E01 fue reforzado para verificar
+            persistencia real vía <code>GET /pedido/{id}</code>; se añadió TC-PD13 (TC-26)
+            en la suite API para cubrir todos los campos del pedido persistido.
           </td>
           <td style="white-space:nowrap;font-size:12px;">
             TC-E2E01<br>TC-PD13
