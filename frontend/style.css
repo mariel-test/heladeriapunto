@@ -193,8 +193,8 @@ html, body {
    ══════════════════════════════════════════════════ */
 .grid-productos {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fit, minmax(calc(200px + 1cm), 1fr));
+  gap: 1cm;
   width: 100%;
   max-width: 760px;
   overflow-y: auto;
@@ -204,7 +204,7 @@ html, body {
   background: var(--card);
   border: 2px solid transparent;
   border-radius: var(--radius);
-  padding: 28px 20px;
+  padding: calc(28px + 0.5cm) calc(20px + 0.5cm);
   cursor: pointer;
   transition: border-color 0.15s, background 0.15s, transform 0.12s;
   display: flex;
@@ -275,8 +275,8 @@ html, body {
 /* Grid de sabores — scroll interno para que quepa en pantalla */
 .grid-sabores {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(auto-fill, minmax(calc(180px + 1cm), 1fr));
+  gap: 1cm;
   width: 100%;
   max-width: 760px;
   overflow-y: auto;
@@ -292,7 +292,7 @@ html, body {
   background: var(--card);
   border: 2px solid transparent;
   border-radius: var(--radius-sm);
-  padding: 14px 16px;
+  padding: calc(14px + 0.5cm) calc(16px + 0.5cm);
   cursor: pointer;
   transition: border-color 0.12s, background 0.12s;
   user-select: none;
