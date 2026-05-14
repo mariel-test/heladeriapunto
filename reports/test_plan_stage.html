@@ -911,10 +911,13 @@
           <td class="id">TC-INT03</td>
           <td class="name">Lista de productos se renderiza desde API</td>
           <td class="desc">Al cargar la pantalla de productos, el componente llama a GET /productos y muestra nombre y precio de cada uno</td>
-          <td class="expected">5 productos visibles · precio formateado · sabores_max accesible para limitar selección en UI</td>
+          <td class="expected">5 productos visibles · precio formateado · sabores_max accesible para limitar selección en UI · hover sin solapamiento con el header</td>
           <td><span class="pri critical">Critical</span></td>
           <td><span class="sev blocker">Blocker</span></td>
-          <td><span class="status pass">✓ PASS</span></td>
+          <td>
+            <span class="status" style="background:#fee2e2;color:#dc2626;display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;">✗ NO PASS</span>
+            <div style="font-size:10.5px;color:#dc2626;margin-top:4px;">BUG-003 abierto</div>
+          </td>
         </tr>
         <tr>
           <td class="id">TC-INT04</td>
