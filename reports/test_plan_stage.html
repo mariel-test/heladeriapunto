@@ -1007,7 +1007,7 @@
 <div class="section">
   <div class="section-header" style="background:#b45309;">
     🐛 Defectos Encontrados
-    <span class="badge">3 defectos · Cerrados</span>
+    <span class="badge">2 cerrados · 1 abierto</span>
     <span style="margin-left:auto;font-size:11px;font-weight:400;opacity:.85;">Detectados durante la ejecución de los tests de integración UI↔API</span>
   </div>
   <div class="tbl-wrap">
@@ -1063,20 +1063,25 @@
             <code>transform: translateY(-3px)</code> del efecto hover — los 3px
             que la tarjeta sube quedan ocultos exactamente donde está el header.
             <br><br>
-            <strong>Fix aplicado:</strong> eliminado <code>overflow-y: auto</code>
-            (5 productos siempre caben en pantalla sin scroll) y añadido
-            <code>padding-top: 4px</code> como buffer visual.
+            <strong>Pendiente de corrección.</strong> Este defecto fue
+            identificado por el equipo de QA (automatización de pruebas).
+            La corrección implica modificar el layout CSS de
+            <code>.grid-productos</code> en <code>style.css</code> y
+            requiere intervención de un <strong>desarrollador frontend</strong>.
+            El equipo de QA no tiene rol de desarrollo frontend y no está
+            en condiciones de aplicar el fix sin riesgo de introducir
+            regresiones visuales.
           </td>
           <td style="white-space:nowrap;font-size:12px;">
             Reporte manual<br>pantalla productos
           </td>
           <td><span class="sev minor">Minor</span></td>
           <td>
-            <span class="status pass" style="background:#dcfce7;color:#16a34a;">
-              ✓ Cerrado
+            <span class="status pending" style="background:#fee2e2;color:#dc2626;border:none;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:700;white-space:nowrap;display:inline-flex;align-items:center;gap:5px;">
+              🔴 Abierto
             </span>
             <div style="font-size:10.5px;color:#64748b;margin-top:4px;">
-              Fix en <code>dev</code> · 2026-05-14
+              Asignar a dev frontend
             </div>
           </td>
         </tr>

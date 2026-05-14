@@ -197,11 +197,7 @@ html, body {
   gap: 16px;
   width: 100%;
   max-width: 760px;
-  /* Sin overflow-y: auto — 5 productos siempre caben en pantalla.
-     overflow-y: auto creaba un scroll container que recortaba el
-     transform: translateY(-3px) del hover en las tarjetas superiores,
-     haciéndolas desaparecer bajo el header (BUG-003). */
-  padding-top: 4px;
+  overflow-y: auto;
 }
 
 .card-producto {
