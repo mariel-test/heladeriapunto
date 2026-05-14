@@ -267,14 +267,14 @@
   </div>
   <div class="card" style="border-color:#0369a1;">
     <div class="num">10</div>
-    <div class="label">🖥️ UI↔API · Pendiente</div>
+    <div class="label">🖥️ UI↔API · PASS</div>
   </div>
   <div class="card" style="border-color:#0f172a;">
     <div class="num">56</div>
     <div class="label">Total Test Cases</div>
   </div>
   <div class="card" style="border-color:#64748b;min-width:160px;">
-    <div class="num" style="font-size:22px;">45 %</div>
+    <div class="num" style="font-size:22px;">63 %</div>
     <div class="label">Cobertura Construida</div>
   </div>
 </div>
@@ -282,9 +282,9 @@
 <div class="progress-wrap">
   <div class="progress-label">
     <span>Progreso del plan de pruebas</span>
-    <span>25 / 56 test cases construidos</span>
+    <span>35 / 56 test cases construidos</span>
   </div>
-  <div class="progress-bar"><div class="progress-fill" style="width:45%"></div></div>
+  <div class="progress-bar"><div class="progress-fill" style="width:63%"></div></div>
 </div>
 
 <div class="legend">
@@ -896,7 +896,7 @@
           <td class="expected">10 tarjetas de sabor visibles · nombre y categoría coinciden con la respuesta de /sabores</td>
           <td><span class="pri critical">Critical</span></td>
           <td><span class="sev blocker">Blocker</span></td>
-          <td><span class="status pending">⏳ PENDING</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
         </tr>
         <tr>
           <td class="id">TC-INT02</td>
@@ -905,7 +905,7 @@
           <td class="expected">GET /sabores?sin_tacc=true interceptado · lista actualizada con solo sabores sin TACC · sin recarga de página</td>
           <td><span class="pri high">High</span></td>
           <td><span class="sev major">Major</span></td>
-          <td><span class="status pending">⏳ PENDING</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
         </tr>
         <tr>
           <td class="id">TC-INT03</td>
@@ -914,7 +914,7 @@
           <td class="expected">5 productos visibles · precio formateado · sabores_max accesible para limitar selección en UI</td>
           <td><span class="pri critical">Critical</span></td>
           <td><span class="sev blocker">Blocker</span></td>
-          <td><span class="status pending">⏳ PENDING</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
         </tr>
         <tr>
           <td class="id">TC-INT04</td>
@@ -923,7 +923,7 @@
           <td class="expected">Tras seleccionar un segundo sabor, el botón está deshabilitado o aparece mensaje de límite · no se dispara POST /pedido</td>
           <td><span class="pri critical">Critical</span></td>
           <td><span class="sev critical">Critical</span></td>
-          <td><span class="status pending">⏳ PENDING</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
         </tr>
 
         <tr style="background:#f8fafc;">
@@ -937,7 +937,7 @@
           <td class="expected">Payload interceptado coincide exactamente con el schema PedidoIn · HTTP 201 recibido</td>
           <td><span class="pri critical">Critical</span></td>
           <td><span class="sev blocker">Blocker</span></td>
-          <td><span class="status pending">⏳ PENDING</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
         </tr>
         <tr>
           <td class="id">TC-INT06</td>
@@ -946,7 +946,7 @@
           <td class="expected">El id visible en pantalla coincide con el id del JSON de respuesta del servidor</td>
           <td><span class="pri critical">Critical</span></td>
           <td><span class="sev critical">Critical</span></td>
-          <td><span class="status pending">⏳ PENDING</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
         </tr>
         <tr>
           <td class="id">TC-INT07</td>
@@ -955,7 +955,7 @@
           <td class="expected">Mensaje de error visible al usuario · no se expone detail técnico de FastAPI · pedido no avanza</td>
           <td><span class="pri high">High</span></td>
           <td><span class="sev critical">Critical</span></td>
-          <td><span class="status pending">⏳ PENDING</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
         </tr>
 
         <tr style="background:#f8fafc;">
@@ -969,7 +969,7 @@
           <td class="expected">Request interceptado con body {"query": "&lt;texto exacto del input&gt;"} · Content-Type: application/json</td>
           <td><span class="pri critical">Critical</span></td>
           <td><span class="sev blocker">Blocker</span></td>
-          <td><span class="status pending">⏳ PENDING</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
         </tr>
         <tr>
           <td class="id">TC-INT09</td>
@@ -978,7 +978,7 @@
           <td class="expected">Solo el texto de "answer" visible · el array "context" no se expone al usuario</td>
           <td><span class="pri high">High</span></td>
           <td><span class="sev major">Major</span></td>
-          <td><span class="status pending">⏳ PENDING</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
         </tr>
 
         <tr style="background:#f8fafc;">
@@ -992,7 +992,7 @@
           <td class="expected">Elemento de loading visible durante la espera · desaparece cuando llega la respuesta · botón de envío deshabilitado para evitar doble submit</td>
           <td><span class="pri high">High</span></td>
           <td><span class="sev major">Major</span></td>
-          <td><span class="status pending">⏳ PENDING</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
         </tr>
 
       </tbody>
@@ -1007,7 +1007,7 @@
 <footer>
   Frío &amp; Punto — Test Plan v1.0 &nbsp;·&nbsp; Branch: <strong>dev</strong> &nbsp;·&nbsp;
   Generado el 2026-05-14 &nbsp;·&nbsp; QA Owner: mariel-test &nbsp;·&nbsp;
-  25 / 56 test cases implementados (45%)
+  35 / 56 test cases implementados (63%)
 </footer>
 
 </body>
