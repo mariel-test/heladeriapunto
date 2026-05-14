@@ -1,0 +1,164 @@
+[
+  {
+    "id": "faq_01",
+    "pregunta": "¿Qué sabores de crema tienen disponibles?",
+    "respuesta": "Nuestros sabores de crema son: vainilla, chocolate, dulce de leche, tramontana (dulce de leche con chips de chocolate), crema americana, frutilla con crema, maracuyá con crema y menta granizada. Los sabores pueden variar según disponibilidad diaria.",
+    "categoria": "sabores"
+  },
+  {
+    "id": "faq_02",
+    "pregunta": "¿Qué sabores de agua o frutales tienen?",
+    "respuesta": "Nuestros sabores de agua son: limón, naranja, frutilla, frambuesa, mango y maracuyá. Son refrescantes, sin lácteos y aptos para veganos.",
+    "categoria": "sabores"
+  },
+  {
+    "id": "faq_03",
+    "pregunta": "¿Tienen helados sin TACC o aptos para celíacos?",
+    "respuesta": "Sí. Los sabores sin TACC son: vainilla, chocolate, dulce de leche, limón, naranja, frutilla, frambuesa, mango y maracuyá. Sin embargo, nuestro local no es un ambiente libre de gluten: elaboramos en instalaciones donde también se procesan productos con TACC. Ante una celiaquía severa, recomendamos consultar en caja antes de comprar.",
+    "categoria": "sabores"
+  },
+  {
+    "id": "faq_04",
+    "pregunta": "¿Tienen opciones veganas?",
+    "respuesta": "Sí. Todos los sabores de agua (limón, naranja, frutilla, frambuesa, mango y maracuyá) son 100% veganos, ya que no contienen lácteos ni derivados animales. Los helados de crema contienen leche y no son aptos para dieta vegana.",
+    "categoria": "sabores"
+  },
+  {
+    "id": "faq_05",
+    "pregunta": "¿Tienen helado de chocolate?",
+    "respuesta": "Sí, tenemos chocolate en nuestra línea de cremas. También tenemos tramontana, que es dulce de leche con chips de chocolate. Ambos están disponibles todos los días.",
+    "categoria": "sabores"
+  },
+  {
+    "id": "faq_06",
+    "pregunta": "¿Los sabores cambian o rotan?",
+    "respuesta": "Los sabores base (vainilla, chocolate, dulce de leche, limón, frutilla) están disponibles todo el año. Algunos sabores estacionales o especiales pueden variar según temporada. Te recomendamos consultar en caja el día de tu visita para confirmar disponibilidad.",
+    "categoria": "sabores"
+  },
+  {
+    "id": "faq_07",
+    "pregunta": "¿Qué alérgenos contienen los helados?",
+    "respuesta": "Los helados de crema contienen leche de vaca (lácteos). Algunos sabores pueden contener trazas de frutos secos (maní, almendras, nueces). La tramontana contiene chips de chocolate que pueden tener trazas de soja. Nuestras instalaciones no son libres de alérgenos cruzados. Ante cualquier alergia severa, consultá en caja antes de comprar.",
+    "categoria": "sabores"
+  },
+  {
+    "id": "faq_08",
+    "pregunta": "¿Los helados son artesanales?",
+    "respuesta": "Sí, todos nuestros helados son de elaboración propia, preparados diariamente en nuestro local con ingredientes frescos. No usamos premezclas industriales ni colorantes artificiales.",
+    "categoria": "sabores"
+  },
+  {
+    "id": "faq_09",
+    "pregunta": "¿Qué formatos o presentaciones venden?",
+    "respuesta": "Vendemos helado en los siguientes formatos: vasito individual, cucurucho simple, cucurucho doble, pote de 1/4 kg, pote de 1/2 kg, pote de 1 kg y tortas heladas. Podés combinar hasta dos sabores en cualquier formato.",
+    "categoria": "productos"
+  },
+  {
+    "id": "faq_10",
+    "pregunta": "¿Venden tortas heladas?",
+    "respuesta": "Sí, tenemos tortas heladas. Ofrecemos torta individual (1 porción) y torta mediana para 8 porciones. Las tortas tienen base de pionono o brownie según disponibilidad y podés elegir hasta dos sabores de helado. Para pedidos especiales consultá directamente en caja.",
+    "categoria": "productos"
+  },
+  {
+    "id": "faq_11",
+    "pregunta": "¿Tienen cucuruchos?",
+    "respuesta": "Sí, tenemos cucurucho simple (1 bocha) y cucurucho doble (2 bochas). Los conos no son aptos para celíacos ya que contienen gluten.",
+    "categoria": "productos"
+  },
+  {
+    "id": "faq_12",
+    "pregunta": "¿Venden potes para llevar?",
+    "respuesta": "Sí. Tenemos potes de 1/4 kg, 1/2 kg y 1 kg para llevar. Podés combinar hasta dos sabores por pote. Los potes incluyen tapa y se entregan en bolsa fría.",
+    "categoria": "productos"
+  },
+  {
+    "id": "faq_13",
+    "pregunta": "¿Cuánto cuesta el kilo de helado?",
+    "respuesta": "El kilo de helado tiene un precio de $4.000. El 1/2 kg cuesta $2.200 y el 1/4 kg cuesta $1.200. Los precios pueden actualizarse; te recomendamos confirmar en caja el día de tu visita.",
+    "categoria": "precios"
+  },
+  {
+    "id": "faq_14",
+    "pregunta": "¿Cuánto vale un cucurucho?",
+    "respuesta": "El cucurucho simple (1 bocha) cuesta $800 y el cucurucho doble (2 bochas) cuesta $1.400. El vasito individual cuesta $600.",
+    "categoria": "precios"
+  },
+  {
+    "id": "faq_15",
+    "pregunta": "¿Cuánto sale una torta helada?",
+    "respuesta": "La torta helada individual cuesta $3.500 y la torta mediana para 8 porciones cuesta $12.000. Los precios pueden variar; consultá en caja para confirmar.",
+    "categoria": "precios"
+  },
+  {
+    "id": "faq_16",
+    "pregunta": "¿Aceptan tarjeta de crédito o débito?",
+    "respuesta": "No, en este momento no aceptamos tarjetas de crédito ni débito. Los medios de pago disponibles son: efectivo, Mercado Pago (código QR) y transferencia bancaria.",
+    "categoria": "politicas"
+  },
+  {
+    "id": "faq_17",
+    "pregunta": "¿Qué medios de pago aceptan?",
+    "respuesta": "Aceptamos efectivo, Mercado Pago mediante código QR y transferencia bancaria. No aceptamos tarjetas de crédito ni débito. Para transferencias, consultá el CBU en caja.",
+    "categoria": "politicas"
+  },
+  {
+    "id": "faq_18",
+    "pregunta": "¿Aceptan devoluciones o cambios?",
+    "respuesta": "No aceptamos devoluciones ni cambios una vez que el producto fue entregado. En caso de error nuestro, consultá en caja al momento de la compra.",
+    "categoria": "politicas"
+  },
+  {
+    "id": "faq_19",
+    "pregunta": "¿Dónde están ubicados?",
+    "respuesta": "Tenemos tres sucursales en Córdoba: Sucursal Centro en Av. Colón 1234, Sucursal Nueva Córdoba en Bv. San Juan 567, y Sucursal Cerro de las Rosas en Av. Rafael Núñez 890.",
+    "categoria": "sucursales"
+  },
+  {
+    "id": "faq_20",
+    "pregunta": "¿Cuál es el horario de atención?",
+    "respuesta": "Las tres sucursales atienden de lunes a domingo. Sucursal Centro: 10:00 a 22:00. Sucursal Nueva Córdoba: 11:00 a 23:00. Sucursal Cerro de las Rosas: 12:00 a 22:00. Los horarios pueden variar en feriados.",
+    "categoria": "sucursales"
+  },
+  {
+    "id": "faq_21",
+    "pregunta": "¿Tienen estacionamiento?",
+    "respuesta": "La sucursal de Cerro de las Rosas tiene estacionamiento propio en la galería. Las sucursales de Centro y Nueva Córdoba no tienen estacionamiento propio, pero hay lugares en la vía pública cercanos.",
+    "categoria": "sucursales"
+  },
+  {
+    "id": "faq_22",
+    "pregunta": "¿Tienen delivery? ¿Reparten a domicilio?",
+    "respuesta": "No, Frío & Punto no ofrece servicio de delivery ni reparto a domicilio. La venta es exclusivamente en el local. Consultá en caja si tenés dudas.",
+    "categoria": "politicas"
+  },
+  {
+    "id": "faq_23",
+    "pregunta": "¿Se puede reservar una torta o hacer un pedido anticipado?",
+    "respuesta": "No contamos con sistema de reservas ni pedidos anticipados en línea. Para consultas sobre tortas para eventos, acercate directamente a cualquiera de nuestras sucursales y hablá con el encargado en caja.",
+    "categoria": "politicas"
+  },
+  {
+    "id": "faq_24",
+    "pregunta": "¿Tienen wifi para clientes?",
+    "respuesta": "No, no ofrecemos servicio de wifi en ninguna de nuestras sucursales. Consultá en caja si tenés alguna otra consulta.",
+    "categoria": "politicas"
+  },
+  {
+    "id": "faq_25",
+    "pregunta": "¿Venden café, té o infusiones?",
+    "respuesta": "No, no vendemos café ni ningún tipo de infusión. Somos una heladería artesanal. Solo vendemos helados y productos relacionados. Consultá en caja si tenés dudas.",
+    "categoria": "politicas"
+  },
+  {
+    "id": "faq_26",
+    "pregunta": "¿Venden medialunas, facturas o productos de panadería?",
+    "respuesta": "No, no vendemos medialunas ni ningún producto de panadería o pastelería. Nuestro menú es exclusivamente de helados artesanales y tortas heladas. Consultá en caja si necesitás más información.",
+    "categoria": "politicas"
+  },
+  {
+    "id": "faq_27",
+    "pregunta": "¿Los helados contienen alcohol?",
+    "respuesta": "No, ninguno de nuestros helados contiene alcohol. Son aptos para todas las edades.",
+    "categoria": "sabores"
+  }
+]

@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Frío & Punto — Test Plan &amp; Coverage · Stage</title>
+  <style>
+    :root {
+      --pass:    #16a34a;
+      --pass-bg: #dcfce7;
+      --pending: #92400e;
+      --pending-bg: #fef3c7;
+      --smoke-bg: #eff6ff;
+      --smoke:   #1e40af;
+      --e2e-bg:  #faf5ff;
+      --e2e:     #6b21a8;
+      --section-api:    #0f766e;
+      --section-ia:     #7c3aed;
+      --section-smoke:  #1d4ed8;
+      --section-e2e:    #9333ea;
+      --pri-critical: #dc2626;
+      --pri-high:     #ea580c;
+      --pri-medium:   #ca8a04;
+      --pri-low:      #65a30d;
+      --sev-blocker:  #7f1d1d;
+      --sev-critical: #dc2626;
+      --sev-major:    #ea580c;
+      --sev-minor:    #d97706;
+      --sev-trivial:  #6b7280;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f8fafc;
+      color: #0f172a;
+      font-size: 13px;
+    }
+
+    /* ── Header ── */
+    header {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #f1f5f9;
+      padding: 28px 40px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+    header h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.3px; }
+    header h1 span { color: #38bdf8; }
+    .header-meta { display: flex; gap: 24px; font-size: 12px; color: #94a3b8; }
+    .header-meta b { color: #e2e8f0; display: block; font-size: 13px; }
+
+    /* ── Summary cards ── */
+    .summary {
+      display: flex;
+      gap: 12px;
+      padding: 20px 40px;
+      flex-wrap: wrap;
+    }
+    .card {
+      background: white;
+      border-radius: 10px;
+      padding: 14px 22px;
+      min-width: 130px;
+      box-shadow: 0 1px 3px rgba(0,0,0,.08);
+      border-top: 3px solid #e2e8f0;
+    }
+    .card.pass   { border-color: var(--pass); }
+    .card.pending{ border-color: #f59e0b; }
+    .card.smoke  { border-color: #3b82f6; }
+    .card.e2e    { border-color: #a855f7; }
+    .card .num {
+      font-size: 28px;
+      font-weight: 700;
+      line-height: 1.1;
+      color: #0f172a;
+    }
+    .card .label { font-size: 11px; color: #64748b; margin-top: 2px; text-transform: uppercase; letter-spacing: .5px; }
+
+    /* ── Legend ── */
+    .legend {
+      display: flex;
+      gap: 20px;
+      padding: 0 40px 16px;
+      flex-wrap: wrap;
+      font-size: 11.5px;
+      color: #475569;
+    }
+    .legend-item { display: flex; align-items: center; gap: 6px; }
+    .dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+
+    /* ── Section wrapper ── */
+    .section { margin: 0 24px 28px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      border-radius: 8px 8px 0 0;
+      color: white;
+      font-weight: 600;
+      font-size: 13.5px;
+    }
+    .section-header .badge {
+      background: rgba(255,255,255,.25);
+      border-radius: 20px;
+      padding: 2px 10px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .bg-api   { background: var(--section-api); }
+    .bg-ia    { background: var(--section-ia); }
+    .bg-smoke { background: var(--section-smoke); }
+    .bg-e2e   { background: var(--section-e2e); }
+
+    /* ── Table ── */
+    .tbl-wrap {
+      overflow-x: auto;
+      border-radius: 0 0 8px 8px;
+      box-shadow: 0 1px 4px rgba(0,0,0,.08);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+    }
+    thead th {
+      background: #f1f5f9;
+      padding: 8px 12px;
+      text-align: left;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+      color: #475569;
+      font-weight: 600;
+      border-bottom: 2px solid #e2e8f0;
+      white-space: nowrap;
+    }
+    tbody tr { border-bottom: 1px solid #f1f5f9; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #f8fafc; }
+    td { padding: 9px 12px; vertical-align: top; line-height: 1.45; }
+    td.id { font-family: 'Courier New', monospace; font-size: 11.5px; color: #64748b; white-space: nowrap; }
+    td.name { font-weight: 600; color: #1e293b; white-space: nowrap; }
+    td.desc { color: #475569; max-width: 260px; }
+    td.expected { color: #334155; max-width: 230px; font-size: 12px; }
+
+    /* ── Status badge ── */
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .status.pass    { background: var(--pass-bg);    color: var(--pass); }
+    .status.pending { background: var(--pending-bg); color: var(--pending); }
+
+    /* ── Priority badge ── */
+    .pri {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 10.5px;
+      font-weight: 700;
+      white-space: nowrap;
+      color: white;
+    }
+    .pri.critical { background: var(--pri-critical); }
+    .pri.high     { background: var(--pri-high); }
+    .pri.medium   { background: var(--pri-medium); }
+    .pri.low      { background: var(--pri-low); }
+
+    /* ── Severity badge ── */
+    .sev {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 10.5px;
+      font-weight: 600;
+      white-space: nowrap;
+      border: 1.5px solid;
+    }
+    .sev.blocker  { color: var(--sev-blocker);  border-color: var(--sev-blocker);  }
+    .sev.critical { color: var(--sev-critical); border-color: var(--sev-critical); }
+    .sev.major    { color: var(--sev-major);    border-color: var(--sev-major);    }
+    .sev.minor    { color: var(--sev-minor);    border-color: var(--sev-minor);    }
+    .sev.trivial  { color: var(--sev-trivial);  border-color: var(--sev-trivial);  }
+
+    /* ── Section label (subsection) ── */
+    .subsection {
+      padding: 7px 14px;
+      background: #f8fafc;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: #475569;
+      border-bottom: 1px solid #e2e8f0;
+      letter-spacing: .3px;
+      text-transform: uppercase;
+    }
+
+    /* ── Footer ── */
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #94a3b8;
+      font-size: 11px;
+      border-top: 1px solid #e2e8f0;
+      margin-top: 10px;
+    }
+
+    /* ── Progress bar ── */
+    .progress-wrap { padding: 0 40px 20px; }
+    .progress-label { font-size: 12px; color: #475569; margin-bottom: 6px; display: flex; justify-content: space-between; }
+    .progress-bar { height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, #16a34a, #4ade80); border-radius: 4px; }
+  </style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════════
+     HEADER
+════════════════════════════════════════════════ -->
+<header>
+  <div>
+    <h1>🍦 <span>Frío &amp; Punto</span> — Test Plan &amp; Coverage</h1>
+    <div style="font-size:12px;color:#94a3b8;margin-top:4px;">
+      Entorno: <strong style="color:#38bdf8;">STAGING</strong> &nbsp;·&nbsp;
+      Branch: <strong style="color:#38bdf8;">dev</strong> &nbsp;·&nbsp;
+      Base URL: <code style="color:#7dd3fc;">http://localhost:8000</code>
+    </div>
+  </div>
+  <div class="header-meta">
+    <div><b>2026-05-14</b>Generado</div>
+    <div><b>mariel-test</b>QA Owner</div>
+    <div><b>v1.0.0</b>API Version</div>
+  </div>
+</header>
+
+<!-- ════════════════════════════════════════════════
+     SUMMARY CARDS
+════════════════════════════════════════════════ -->
+<div class="summary">
+  <div class="card pass">
+    <div class="num">25</div>
+    <div class="label">✅ Pasaron (API)</div>
+  </div>
+  <div class="card pending">
+    <div class="num">9</div>
+    <div class="label">🔨 IA · Pendiente</div>
+  </div>
+  <div class="card smoke">
+    <div class="num">6</div>
+    <div class="label">🚀 Smoke · Pendiente</div>
+  </div>
+  <div class="card e2e">
+    <div class="num">6</div>
+    <div class="label">🔗 E2E · Pendiente</div>
+  </div>
+  <div class="card" style="border-color:#0f172a;">
+    <div class="num">46</div>
+    <div class="label">Total Test Cases</div>
+  </div>
+  <div class="card" style="border-color:#64748b;min-width:160px;">
+    <div class="num" style="font-size:22px;">54 %</div>
+    <div class="label">Cobertura Construida</div>
+  </div>
+</div>
+
+<div class="progress-wrap">
+  <div class="progress-label">
+    <span>Progreso del plan de pruebas</span>
+    <span>25 / 46 test cases construidos</span>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" style="width:54%"></div></div>
+</div>
+
+<div class="legend">
+  <div class="legend-item"><span class="dot" style="background:var(--pass)"></span> PASS — construido y ejecutado OK</div>
+  <div class="legend-item"><span class="dot" style="background:#f59e0b"></span> PENDING — definido, aún no implementado</div>
+  <div class="legend-item"><span class="dot" style="background:#3b82f6"></span> Smoke — validación rápida en producción</div>
+  <div class="legend-item"><span class="dot" style="background:#a855f7"></span> E2E — flujo completo usuario → UI → API → BD</div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════
+     SECCIÓN 1 — API · SABORES
+════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header bg-api">
+    🧊 API — Sabores
+    <span class="badge">8 tests · PASS</span>
+    <span style="margin-left:auto;font-size:11px;font-weight:400;opacity:.85;">tests/api/test_sabores.py</span>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th><th>Nombre del Test</th><th>Descripción</th>
+          <th>Resultado Esperado</th><th>Prioridad</th><th>Severidad</th><th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="id">TC-S01</td>
+          <td class="name">Lista completa · 10 sabores</td>
+          <td class="desc">GET /sabores sin parámetros devuelve todos los sabores del seed</td>
+          <td class="expected">HTTP 200 · array de exactamente 10 elementos</td>
+          <td><span class="pri critical">Critical</span></td>
+          <td><span class="sev blocker">Blocker</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-S02</td>
+          <td class="name">Estructura del sabor</td>
+          <td class="desc">Cada objeto sabor expone los campos del contrato: id, nombre, categoria, sin_tacc, vegano, alergenos</td>
+          <td class="expected">Todos los campos presentes · sin_tacc y vegano son boolean · alergenos es array</td>
+          <td><span class="pri high">High</span></td>
+          <td><span class="sev critical">Critical</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-S03</td>
+          <td class="name">Filtro categoria=crema</td>
+          <td class="desc">GET /sabores?categoria=crema devuelve solo los helados de crema</td>
+          <td class="expected">HTTP 200 · 6 sabores · todos con categoria=="crema"</td>
+          <td><span class="pri high">High</span></td>
+          <td><span class="sev major">Major</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-S04</td>
+          <td class="name">Filtro categoria=agua</td>
+          <td class="desc">GET /sabores?categoria=agua devuelve solo los helados de agua</td>
+          <td class="expected">HTTP 200 · 4 sabores · todos con categoria=="agua"</td>
+          <td><span class="pri high">High</span></td>
+          <td><span class="sev major">Major</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-S05</td>
+          <td class="name">Filtro sin_tacc=true</td>
+          <td class="desc">GET /sabores?sin_tacc=true retorna solo los sabores aptos para celíacos</td>
+          <td class="expected">HTTP 200 · 8 sabores · todos con sin_tacc==true</td>
+          <td><span class="pri high">High</span></td>
+          <td><span class="sev major">Major</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-S06</td>
+          <td class="name">Filtro sin_tacc=false</td>
+          <td class="desc">GET /sabores?sin_tacc=false retorna solo los sabores con gluten</td>
+          <td class="expected">HTTP 200 · 2 sabores · todos con sin_tacc==false</td>
+          <td><span class="pri medium">Medium</span></td>
+          <td><span class="sev minor">Minor</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-S07</td>
+          <td class="name">Filtro combinado agua + sin_tacc</td>
+          <td class="desc">GET /sabores?categoria=agua&sin_tacc=true aplica ambos filtros simultáneamente</td>
+          <td class="expected">HTTP 200 · 4 sabores · categoria=="agua" Y sin_tacc==true en cada uno</td>
+          <td><span class="pri medium">Medium</span></td>
+          <td><span class="sev minor">Minor</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-S08</td>
+          <td class="name">Categoría inexistente → lista vacía</td>
+          <td class="desc">GET /sabores?categoria=medialuna no lanza error, devuelve vacío</td>
+          <td class="expected">HTTP 200 · array vacío []</td>
+          <td><span class="pri low">Low</span></td>
+          <td><span class="sev minor">Minor</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════
+     SECCIÓN 2 — API · PRODUCTOS
+════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header bg-api">
+    🛒 API — Productos
+    <span class="badge">5 tests · PASS</span>
+    <span style="margin-left:auto;font-size:11px;font-weight:400;opacity:.85;">tests/api/test_productos.py</span>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th><th>Nombre del Test</th><th>Descripción</th>
+          <th>Resultado Esperado</th><th>Prioridad</th><th>Severidad</th><th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="id">TC-P01</td>
+          <td class="name">Lista completa · 5 productos</td>
+          <td class="desc">GET /productos sin parámetros devuelve todos los productos del seed</td>
+          <td class="expected">HTTP 200 · array de exactamente 5 elementos</td>
+          <td><span class="pri critical">Critical</span></td>
+          <td><span class="sev blocker">Blocker</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-P02</td>
+          <td class="name">Estructura del producto</td>
+          <td class="desc">Cada producto tiene id, nombre, sabores_max (int > 0) y precio (float > 0)</td>
+          <td class="expected">Todos los campos presentes con tipos correctos</td>
+          <td><span class="pri high">High</span></td>
+          <td><span class="sev critical">Critical</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-P03</td>
+          <td class="name">Detalle producto existente</td>
+          <td class="desc">GET /productos/{id} con un ID válido del seed devuelve el producto correcto</td>
+          <td class="expected">HTTP 200 · id y nombre coinciden con el primer producto de la lista</td>
+          <td><span class="pri high">High</span></td>
+          <td><span class="sev major">Major</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-P04</td>
+          <td class="name">Producto inexistente → 404</td>
+          <td class="desc">GET /productos/9999 con ID que no existe en la BD</td>
+          <td class="expected">HTTP 404 Not Found</td>
+          <td><span class="pri high">High</span></td>
+          <td><span class="sev major">Major</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-P05</td>
+          <td class="name">ID no numérico → 422</td>
+          <td class="desc">GET /productos/abc con ID como string inválido</td>
+          <td class="expected">HTTP 422 Unprocessable Entity</td>
+          <td><span class="pri medium">Medium</span></td>
+          <td><span class="sev minor">Minor</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════
+     SECCIÓN 3 — API · PEDIDOS
+════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header bg-api">
+    📋 API — Pedidos
+    <span class="badge">12 tests · PASS</span>
+    <span style="margin-left:auto;font-size:11px;font-weight:400;opacity:.85;">tests/api/test_pedidos.py</span>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th><th>Nombre del Test</th><th>Descripción</th>
+          <th>Resultado Esperado</th><th>Prioridad</th><th>Severidad</th><th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="id">TC-PD01</td>
+          <td class="name">Crear pedido válido → 201</td>
+          <td class="desc">POST /pedido con producto existente y sabores válidos completa el pedido</td>
+          <td class="expected">HTTP 201 · respuesta incluye id, total y estado</td>
+          <td><span class="pri critical">Critical</span></td>
+          <td><span class="sev blocker">Blocker</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-PD02</td>
+          <td class="name">Total calculado por backend</td>
+          <td class="desc">El precio del pedido lo define el backend; el cliente no puede enviarlo</td>
+          <td class="expected">total == precio del producto en BD (no manipulable desde el cliente)</td>
+          <td><span class="pri critical">Critical</span></td>
+          <td><span class="sev critical">Critical</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-PD03</td>
+          <td class="name">Estado inicial = pendiente</td>
+          <td class="desc">Todo pedido recién creado debe tener estado "pendiente"</td>
+          <td class="expected">estado == "pendiente" en la respuesta del POST</td>
+          <td><span class="pri high">High</span></td>
+          <td><span class="sev critical">Critical</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-PD04</td>
+          <td class="name">Pedido con sabores_max = 1</td>
+          <td class="desc">Producto que admite solo 1 sabor — se envía exactamente 1 sabor</td>
+          <td class="expected">HTTP 201 · total == precio del producto</td>
+          <td><span class="pri high">High</span></td>
+          <td><span class="sev major">Major</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-PD05</td>
+          <td class="name">Obtener pedido existente</td>
+          <td class="desc">GET /pedido/{id} con ID de pedido ya creado devuelve sus datos completos</td>
+          <td class="expected">HTTP 200 · id coincide · sabores_elegidos es lista con id y nombre</td>
+          <td><span class="pri high">High</span></td>
+          <td><span class="sev major">Major</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-PD06</td>
+          <td class="name">Pedido inexistente → 404</td>
+          <td class="desc">GET /pedido/9999 con ID que no existe</td>
+          <td class="expected">HTTP 404 Not Found</td>
+          <td><span class="pri high">High</span></td>
+          <td><span class="sev major">Major</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-PD07</td>
+          <td class="name">Producto inexistente en pedido → 404</td>
+          <td class="desc">POST /pedido con producto_id=9999 (no existe en BD)</td>
+          <td class="expected">HTTP 404 Not Found</td>
+          <td><span class="pri high">High</span></td>
+          <td><span class="sev major">Major</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-PD08</td>
+          <td class="name">Superar sabores_max → 422</td>
+          <td class="desc">Enviar más sabores que el máximo permitido por el producto (regla de negocio)</td>
+          <td class="expected">HTTP 422 · mensaje de error menciona el límite del producto</td>
+          <td><span class="pri critical">Critical</span></td>
+          <td><span class="sev blocker">Blocker</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-PD09</td>
+          <td class="name">Sabor inexistente en pedido → 422</td>
+          <td class="desc">POST /pedido con sabor_id=9999 que no existe en la tabla sabores</td>
+          <td class="expected">HTTP 422 · mensaje de error menciona el ID inválido</td>
+          <td><span class="pri high">High</span></td>
+          <td><span class="sev critical">Critical</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-PD10</td>
+          <td class="name">Sabores vacíos → 422</td>
+          <td class="desc">POST /pedido con sabores_elegidos=[] viola la regla mínimo 1 sabor</td>
+          <td class="expected">HTTP 422 Unprocessable Entity</td>
+          <td><span class="pri high">High</span></td>
+          <td><span class="sev critical">Critical</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-PD11</td>
+          <td class="name">Sin producto_id → 422</td>
+          <td class="desc">POST /pedido sin el campo obligatorio producto_id</td>
+          <td class="expected">HTTP 422 Unprocessable Entity</td>
+          <td><span class="pri high">High</span></td>
+          <td><span class="sev critical">Critical</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-PD12</td>
+          <td class="name">Body JSON inválido → 422</td>
+          <td class="desc">POST /pedido con Content-Type application/json pero body no es JSON válido</td>
+          <td class="expected">HTTP 422 Unprocessable Entity</td>
+          <td><span class="pri medium">Medium</span></td>
+          <td><span class="sev major">Major</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════
+     SECCIÓN 4 — IA · RAG PIPELINE (PENDIENTE)
+════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header bg-ia">
+    🤖 IA — RAG Pipeline
+    <span class="badge">9 tests · PENDIENTE</span>
+    <span style="margin-left:auto;font-size:11px;font-weight:400;opacity:.85;">tests/ia/test_rag_pipeline.py · tests/api/test_ia_router.py</span>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th><th>Nombre del Test</th><th>Descripción</th>
+          <th>Resultado Esperado</th><th>Prioridad</th><th>Severidad</th><th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <div class="subsection">Unidad — ia/rag_pipeline.py (mock ChromaDB + Ollama)</div>
+        <tr>
+          <td class="id">TC-IA01</td>
+          <td class="name">ask_rag → answer + context</td>
+          <td class="desc">Llamada exitosa a ask_rag con ChromaDB y Ollama mockeados devuelve estructura correcta</td>
+          <td class="expected">dict con claves "answer" (str) y "context" (list de 3 strings)</td>
+          <td><span class="pri critical">Critical</span></td>
+          <td><span class="sev blocker">Blocker</span></td>
+          <td><span class="status pending">⏳ PENDING</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-IA02</td>
+          <td class="name">Retorna exactamente TOP_K chunks</td>
+          <td class="desc">El contexto devuelto tiene exactamente TOP_K=3 elementos, ni más ni menos</td>
+          <td class="expected">len(result["context"]) == TOP_K (actualmente 3)</td>
+          <td><span class="pri high">High</span></td>
+          <td><span class="sev major">Major</span></td>
+          <td><span class="status pending">⏳ PENDING</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-IA03</td>
+          <td class="name">Prompt incluye instrucción anti-alucinación</td>
+          <td class="desc">El prompt enviado a Ollama contiene la instrucción de sistema que impide inventar información</td>
+          <td class="expected">"Consultá en caja" y "No tengo información" presentes en el payload enviado a Ollama</td>
+          <td><span class="pri critical">Critical</span></td>
+          <td><span class="sev critical">Critical</span></td>
+          <td><span class="status pending">⏳ PENDING</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-IA04</td>
+          <td class="name">Sin resultados → fallback</td>
+          <td class="desc">Cuando ChromaDB no encuentra chunks relevantes, se devuelve el mensaje de fallback sin llamar a Ollama</td>
+          <td class="expected">answer == "No tengo información sobre eso. Consultá en caja." · context == []</td>
+          <td><span class="pri high">High</span></td>
+          <td><span class="sev critical">Critical</span></td>
+          <td><span class="status pending">⏳ PENDING</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-IA05</td>
+          <td class="name">ChromaDB no disponible → RuntimeError</td>
+          <td class="desc">Cuando ChromaDB.heartbeat() lanza ChromaError, ask_rag propaga RuntimeError con mensaje claro</td>
+          <td class="expected">RuntimeError con "ChromaDB" en el mensaje</td>
+          <td><span class="pri critical">Critical</span></td>
+          <td><span class="sev blocker">Blocker</span></td>
+          <td><span class="status pending">⏳ PENDING</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-IA06</td>
+          <td class="name">Ollama no disponible → RuntimeError</td>
+          <td class="desc">Cuando requests.post lanza ConnectionError, ask_rag propaga RuntimeError con mensaje claro</td>
+          <td class="expected">RuntimeError con "Ollama" en el mensaje</td>
+          <td><span class="pri critical">Critical</span></td>
+          <td><span class="sev blocker">Blocker</span></td>
+          <td><span class="status pending">⏳ PENDING</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-IA07</td>
+          <td class="name">Ollama timeout → RuntimeError</td>
+          <td class="desc">Cuando requests.post lanza Timeout (modelo tardando en cargar), ask_rag indica timeout</td>
+          <td class="expected">RuntimeError con "timeout" en el mensaje</td>
+          <td><span class="pri high">High</span></td>
+          <td><span class="sev critical">Critical</span></td>
+          <td><span class="status pending">⏳ PENDING</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-IA08</td>
+          <td class="name">Router /ia/ask → 200 OK</td>
+          <td class="desc">POST /ia/ask con ask_rag mockeado (TestClient) devuelve respuesta exitosa</td>
+          <td class="expected">HTTP 200 · JSON con "answer" y "context"</td>
+          <td><span class="pri critical">Critical</span></td>
+          <td><span class="sev blocker">Blocker</span></td>
+          <td><span class="status pending">⏳ PENDING</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-IA09</td>
+          <td class="name">Router /ia/ask → 503 cuando IA down</td>
+          <td class="desc">POST /ia/ask cuando ask_rag lanza RuntimeError, el router devuelve 503 con detalle del error</td>
+          <td class="expected">HTTP 503 · JSON con "detail" que contiene el mensaje del error</td>
+          <td><span class="pri critical">Critical</span></td>
+          <td><span class="sev blocker">Blocker</span></td>
+          <td><span class="status pending">⏳ PENDING</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════
+     SECCIÓN 5 — SMOKE TESTS · PRODUCCIÓN
+════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header bg-smoke">
+    🚀 Smoke Tests — Producción
+    <span class="badge">6 tests · PENDIENTE</span>
+    <span style="margin-left:auto;font-size:11px;font-weight:400;opacity:.85;">tests/smoke/test_smoke_prod.py</span>
+  </div>
+  <div style="background:#eff6ff;padding:8px 16px;font-size:12px;color:#1e40af;border-bottom:1px solid #bfdbfe;">
+    ⚡ Objetivo: validar en &lt; 2 min que los servicios críticos responden correctamente tras un deploy.
+    Corren contra <code>BASE_URL=https://prod.frio-y-punto.com.ar</code>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th><th>Nombre del Test</th><th>Descripción</th>
+          <th>Resultado Esperado</th><th>Prioridad</th><th>Severidad</th><th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="id">TC-SM01</td>
+          <td class="name">API health · docs accesibles</td>
+          <td class="desc">GET /docs (Swagger UI generado por FastAPI) responde correctamente tras el deploy</td>
+          <td class="expected">HTTP 200 en menos de 2 segundos</td>
+          <td><span class="pri critical">Critical</span></td>
+          <td><span class="sev blocker">Blocker</span></td>
+          <td><span class="status pending">⏳ PENDING</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-SM02</td>
+          <td class="name">Sabores disponibles en prod</td>
+          <td class="desc">GET /sabores retorna al menos 1 sabor — confirma que la BD de producción está conectada y con datos</td>
+          <td class="expected">HTTP 200 · len(sabores) &gt; 0</td>
+          <td><span class="pri critical">Critical</span></td>
+          <td><span class="sev blocker">Blocker</span></td>
+          <td><span class="status pending">⏳ PENDING</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-SM03</td>
+          <td class="name">Productos disponibles en prod</td>
+          <td class="desc">GET /productos retorna al menos 1 producto — confirma que el catálogo está activo</td>
+          <td class="expected">HTTP 200 · len(productos) &gt; 0</td>
+          <td><span class="pri critical">Critical</span></td>
+          <td><span class="sev blocker">Blocker</span></td>
+          <td><span class="status pending">⏳ PENDING</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-SM04</td>
+          <td class="name">IA responde en producción</td>
+          <td class="desc">POST /ia/ask con pregunta simple ("¿qué sabores tienen?") devuelve respuesta en menos de 30s</td>
+          <td class="expected">HTTP 200 · answer no vacío · tiempo de respuesta &lt; 30s</td>
+          <td><span class="pri critical">Critical</span></td>
+          <td><span class="sev blocker">Blocker</span></td>
+          <td><span class="status pending">⏳ PENDING</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-SM05</td>
+          <td class="name">ChromaDB heartbeat</td>
+          <td class="desc">El servidor ChromaDB en producción responde al heartbeat en tiempo razonable</td>
+          <td class="expected">chromadb.HttpClient().heartbeat() retorna valor en &lt; 1s</td>
+          <td><span class="pri critical">Critical</span></td>
+          <td><span class="sev blocker">Blocker</span></td>
+          <td><span class="status pending">⏳ PENDING</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-SM06</td>
+          <td class="name">Ollama · modelo llama3.2 activo</td>
+          <td class="desc">GET /api/tags en Ollama confirma que el modelo llama3.2 está descargado y listo</td>
+          <td class="expected">Respuesta contiene "llama3.2" en la lista de modelos</td>
+          <td><span class="pri critical">Critical</span></td>
+          <td><span class="sev blocker">Blocker</span></td>
+          <td><span class="status pending">⏳ PENDING</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════
+     SECCIÓN 6 — E2E TESTS
+════════════════════════════════════════════════ -->
+<div class="section">
+  <div class="section-header bg-e2e">
+    🔗 End-to-End — Flujos de Usuario
+    <span class="badge">6 tests · PENDIENTE</span>
+    <span style="margin-left:auto;font-size:11px;font-weight:400;opacity:.85;">tests/ui/ · Playwright</span>
+  </div>
+  <div style="background:#faf5ff;padding:8px 16px;font-size:12px;color:#6b21a8;border-bottom:1px solid #e9d5ff;">
+    🎭 Playwright — flujo completo: usuario → UI (localhost:3000) → API (localhost:8000) → PostgreSQL/ChromaDB
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>ID</th><th>Nombre del Test</th><th>Descripción</th>
+          <th>Resultado Esperado</th><th>Prioridad</th><th>Severidad</th><th>Estado</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="id">TC-E2E01</td>
+          <td class="name">Flujo completo de pedido</td>
+          <td class="desc">Usuario entra al kiosco, selecciona un producto, elige sabores y confirma el pedido</td>
+          <td class="expected">Pantalla de confirmación visible con número de pedido · sin errores en consola</td>
+          <td><span class="pri critical">Critical</span></td>
+          <td><span class="sev blocker">Blocker</span></td>
+          <td><span class="status pending">⏳ PENDING</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-E2E02</td>
+          <td class="name">Pantalla inicial del kiosco</td>
+          <td class="desc">Al cargar localhost:3000 se muestran los botones "Hacer pedido" y "Consultar" correctamente</td>
+          <td class="expected">Ambos botones visibles en la pantalla inicial · título "Frío &amp; Punto" visible</td>
+          <td><span class="pri critical">Critical</span></td>
+          <td><span class="sev blocker">Blocker</span></td>
+          <td><span class="status pending">⏳ PENDING</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-E2E03</td>
+          <td class="name">Chat IA responde a pregunta</td>
+          <td class="desc">Usuario hace clic en "Consultar", escribe "¿tienen opciones veganas?" y envía</td>
+          <td class="expected">Respuesta del asistente visible en el chat · no muestra "503" ni error técnico</td>
+          <td><span class="pri critical">Critical</span></td>
+          <td><span class="sev blocker">Blocker</span></td>
+          <td><span class="status pending">⏳ PENDING</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-E2E04</td>
+          <td class="name">Validación · más sabores del máximo</td>
+          <td class="desc">Usuario intenta elegir más sabores que el permitido por el producto seleccionado</td>
+          <td class="expected">Mensaje de error amigable en la UI (no stack trace) · pedido no se crea</td>
+          <td><span class="pri high">High</span></td>
+          <td><span class="sev critical">Critical</span></td>
+          <td><span class="status pending">⏳ PENDING</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-E2E05</td>
+          <td class="name">Filtro sin TACC en el kiosco</td>
+          <td class="desc">Si la UI expone un filtro sin TACC, al activarlo solo se muestran sabores aptos para celíacos</td>
+          <td class="expected">Solo sabores con sin_tacc=true visibles · conteo correcto en pantalla</td>
+          <td><span class="pri high">High</span></td>
+          <td><span class="sev major">Major</span></td>
+          <td><span class="status pending">⏳ PENDING</span></td>
+        </tr>
+        <tr>
+          <td class="id">TC-E2E06</td>
+          <td class="name">IA indisponible · mensaje amigable</td>
+          <td class="desc">Con el servicio IA caído, el usuario consulta en el chat y la UI muestra el fallback</td>
+          <td class="expected">"Asistente no disponible. Consultá en caja." visible · sin errores técnicos expuestos</td>
+          <td><span class="pri high">High</span></td>
+          <td><span class="sev major">Major</span></td>
+          <td><span class="status pending">⏳ PENDING</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════════ -->
+<footer>
+  Frío &amp; Punto — Test Plan v1.0 &nbsp;·&nbsp; Branch: <strong>dev</strong> &nbsp;·&nbsp;
+  Generado el 2026-05-14 &nbsp;·&nbsp; QA Owner: mariel-test &nbsp;·&nbsp;
+  25 / 46 test cases implementados (54%)
+</footer>
+
+</body>
+</html>
