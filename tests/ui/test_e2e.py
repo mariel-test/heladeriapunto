@@ -93,15 +93,23 @@ def test_e2e01_flujo_completo_pedido(page: Page):
 
     page.locator("#btn-confirmar-pedido").click()
 
-    # ── Confirmación ─────────────────────────────────────────
+    # ── Confirmación — UI muestra producto, total y sabores ──
     expect(page.locator(".confirmado")).to_have_text("✓ Pedido confirmado")
     expect(page.locator(".pedido-id")).to_be_visible()
+
+    # El nombre del producto y el total deben aparecer en la confirmación
+    expect(page.locator(".resumen-producto-nombre")).to_contain_text(PRODUCTO_MAX1)
+    expect(page.locator(".resumen-precio")).to_contain_text("$")
+
+    # El sabor elegido debe aparecer en la lista de confirmación
+    expect(page.locator(".resumen-sabores li")).to_have_count(1)
+    expect(page.locator(".resumen-sabores li").first).to_contain_text(primer_sabor)
 
     pedido_texto = page.locator(".pedido-id").inner_text()
     numero = pedido_texto.replace("Pedido #", "").strip()
     assert numero.isdigit(), f"El id del pedido debe ser numérico: '{numero}'"
 
-    # BUG-004 fix: verificar que el pedido exista en la BD (no solo en la UI)
+    # BUG-004: verificar persistencia real en BD — producto, total y sabores correctos
     resp = requests.get(f"{API}/pedido/{numero}")
     assert resp.status_code == 200, (
         f"Pedido #{numero} mostrado en UI pero no encontrado en BD (status {resp.status_code})"
@@ -109,6 +117,11 @@ def test_e2e01_flujo_completo_pedido(page: Page):
     db_data = resp.json()
     assert db_data["id"] == int(numero)
     assert db_data["estado"] == "pendiente"
+    assert db_data["total"] > 0, "El total en BD debe ser mayor que 0"
+    sabores_bd = [s["nombre"] for s in db_data["sabores_elegidos"]]
+    assert primer_sabor in sabores_bd, (
+        f"Sabor '{primer_sabor}' no encontrado en BD: {sabores_bd}"
+    )
 
     # El botón "Confirmar" se oculta; aparece "Nuevo pedido"
     expect(page.locator("#btn-confirmar-pedido")).not_to_be_visible()
