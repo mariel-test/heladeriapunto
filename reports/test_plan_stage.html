@@ -284,7 +284,7 @@
     <span>Progreso del plan de pruebas</span>
     <span>35 / 56 test cases construidos</span>
   </div>
-  <div class="progress-bar"><div class="progress-fill" style="width:74%"></div></div>
+  <div class="progress-bar"><div class="progress-fill" style="width:86%"></div></div>
 </div>
 
 <div class="legend">
@@ -608,7 +608,7 @@
 <div class="section">
   <div class="section-header bg-ia">
     🤖 IA — RAG Pipeline
-    <span class="badge">9 tests · PENDIENTE</span>
+    <span class="badge" style="background:#16a34a;">9 tests · PASS</span>
     <span style="margin-left:auto;font-size:11px;font-weight:400;opacity:.85;">tests/ia/test_rag_pipeline.py · tests/api/test_ia_router.py</span>
   </div>
   <div class="tbl-wrap">
@@ -628,7 +628,7 @@
           <td class="expected">dict con claves "answer" (str) y "context" (list de 3 strings)</td>
           <td><span class="pri critical">Critical</span></td>
           <td><span class="sev blocker">Blocker</span></td>
-          <td><span class="status pending">⏳ PENDING</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
         </tr>
         <tr>
           <td class="id">TC-IA02</td>
@@ -637,7 +637,7 @@
           <td class="expected">len(result["context"]) == TOP_K (actualmente 3)</td>
           <td><span class="pri high">High</span></td>
           <td><span class="sev major">Major</span></td>
-          <td><span class="status pending">⏳ PENDING</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
         </tr>
         <tr>
           <td class="id">TC-IA03</td>
@@ -646,7 +646,7 @@
           <td class="expected">"Consultá en caja" y "No tengo información" presentes en el payload enviado a Ollama</td>
           <td><span class="pri critical">Critical</span></td>
           <td><span class="sev critical">Critical</span></td>
-          <td><span class="status pending">⏳ PENDING</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
         </tr>
         <tr>
           <td class="id">TC-IA04</td>
@@ -655,7 +655,7 @@
           <td class="expected">answer == "No tengo información sobre eso. Consultá en caja." · context == []</td>
           <td><span class="pri high">High</span></td>
           <td><span class="sev critical">Critical</span></td>
-          <td><span class="status pending">⏳ PENDING</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
         </tr>
         <tr>
           <td class="id">TC-IA05</td>
@@ -664,7 +664,7 @@
           <td class="expected">RuntimeError con "ChromaDB" en el mensaje</td>
           <td><span class="pri critical">Critical</span></td>
           <td><span class="sev blocker">Blocker</span></td>
-          <td><span class="status pending">⏳ PENDING</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
         </tr>
         <tr>
           <td class="id">TC-IA06</td>
@@ -673,7 +673,7 @@
           <td class="expected">RuntimeError con "Ollama" en el mensaje</td>
           <td><span class="pri critical">Critical</span></td>
           <td><span class="sev blocker">Blocker</span></td>
-          <td><span class="status pending">⏳ PENDING</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
         </tr>
         <tr>
           <td class="id">TC-IA07</td>
@@ -682,7 +682,7 @@
           <td class="expected">RuntimeError con "timeout" en el mensaje</td>
           <td><span class="pri high">High</span></td>
           <td><span class="sev critical">Critical</span></td>
-          <td><span class="status pending">⏳ PENDING</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
         </tr>
         <tr>
           <td class="id">TC-IA08</td>
@@ -691,7 +691,7 @@
           <td class="expected">HTTP 200 · JSON con "answer" y "context"</td>
           <td><span class="pri critical">Critical</span></td>
           <td><span class="sev blocker">Blocker</span></td>
-          <td><span class="status pending">⏳ PENDING</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
         </tr>
         <tr>
           <td class="id">TC-IA09</td>
@@ -700,7 +700,7 @@
           <td class="expected">HTTP 503 · JSON con "detail" que contiene el mensaje del error</td>
           <td><span class="pri critical">Critical</span></td>
           <td><span class="sev blocker">Blocker</span></td>
-          <td><span class="status pending">⏳ PENDING</span></td>
+          <td><span class="status pass">✓ PASS</span></td>
         </tr>
       </tbody>
     </table>
@@ -836,7 +836,7 @@
           <td class="expected">Respuesta del asistente visible en el chat · no muestra "503" ni error técnico</td>
           <td><span class="pri critical">Critical</span></td>
           <td><span class="sev blocker">Blocker</span></td>
-          <td><span class="status pass">✅ PASS</span></td>
+          <td><span class="status pending">⏳ PENDING</span></td>
         </tr>
         <tr>
           <td class="id">TC-E2E04</td>
@@ -863,7 +863,7 @@
           <td class="expected">"Asistente no disponible. Consultá en caja." visible · sin errores técnicos expuestos</td>
           <td><span class="pri high">High</span></td>
           <td><span class="sev major">Major</span></td>
-          <td><span class="status pass">✅ PASS</span></td>
+          <td><span class="status pending">⏳ PENDING</span></td>
         </tr>
       </tbody>
     </table>
@@ -1173,7 +1173,7 @@
 <footer>
   Frío &amp; Punto — Test Plan v1.0 &nbsp;·&nbsp; Branch: <strong>dev</strong> &nbsp;·&nbsp;
   Generado el 2026-05-14 &nbsp;·&nbsp; QA Owner: mariel-test &nbsp;·&nbsp;
-  42 / 57 test cases implementados (74%)
+  49 / 57 test cases implementados (86%)
 </footer>
 
 </body>
